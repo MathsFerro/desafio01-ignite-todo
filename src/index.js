@@ -101,14 +101,14 @@ app.put('/todos/:id', checksExistsUserAccount, checkIfExistTodo, (request, respo
   userTodoFound.title = title;
   userTodoFound.deadline = new Date(deadline);
   
-  return response.status(204).json(userTodoFound);
+  return response.json(userTodoFound);
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, checkIfExistTodo, (request, response) => {
   const { userTodoFound } = request;
   
   userTodoFound.done = !userTodoFound.done;
-  return response.status(201).json(todoFound);
+  return response.json(userTodoFound);
 });
 
 app.delete('/todos/:id', checksExistsUserAccount, checkIfExistTodo, (request, response) => {
