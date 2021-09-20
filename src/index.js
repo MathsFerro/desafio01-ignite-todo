@@ -29,7 +29,7 @@ function checksExistsUserAccount(request, response, next) {
   const userFound = users.find(user => user.username === username);
   
   if(!userFound) {
-    return response.status(400).json({ error: "Don't exist this user" });
+    return response.status(404).json({ error: "Don't exist this user" });
   }
 
   request.user = userFound;
@@ -72,7 +72,19 @@ app.post('/todos', checksExistsUserAccount, (request, response) => {
 });
 
 app.put('/todos/:id', checksExistsUserAccount, (request, response) => {
+  const { title, deadline } = request.body;
+  const { id } = request.params;
+  const { user } = request;
+ 
+  const userTodo = user.todos.find(item => item.id === id);
+  if(!userTodo) {
+    return response.status(404).json({ error: "Todo not found" });
+  }
+
+  userTodo.title = title;
+  userTodo.deadline = new Date(deadline);
   
+  return response.status(204).send();
 });
 
 app.patch('/todos/:id/done', checksExistsUserAccount, (request, response) => {
